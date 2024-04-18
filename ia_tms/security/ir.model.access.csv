@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tms_trucks,tms_trucks,model_tms_trucks,base.group_user,1,1,1,1
+access_tms_trailers,tms_trailers,model_tms_trailers,base.group_user,1,1,1,1
+access_tms_drivers,tms_drivers,model_tms_drivers,base.group_user,1,1,1,1
+access_tms_loads,tms_loads,model_tms_loads,base.group_user,1,1,1,1
+access_tms_loads_lines,tms_loads_lines,model_tms_loads_lines,base.group_user,1,1,1,1
+access_tms_loads_allocate,tms_loads_allocate,model_tms_loads_allocate,base.group_user,1,1,1,1
+access_tms_bundle_allocate,bundle.loads.allocate,model_bundle_loads_allocate,base.group_user,1,1,1,1
+

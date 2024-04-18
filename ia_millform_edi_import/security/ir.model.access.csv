@@ -1,0 +1,18 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_edi_import_picking,edi.import.picking,model_edi_import_picking,base.group_user,1,1,1,1
+access_edi_import_config,edi.import.config,model_edi_import_config,base.group_user,1,1,1,1
+access_edi_import_slitlist,edi.import.slitlist,model_edi_import_slitlist,base.group_user,1,1,1,1
+access_edi_import_slitlist_line,edi.import.slitlist.line,model_edi_import_slitlist_line,base.group_user,1,1,1,1
+access_edi_import_picking_line,edi.import.picking.line,model_edi_import_picking_line,base.group_user,1,1,1,1
+access_edi_product_slit,edi.product.slit,model_edi_product_slit,base.group_user,1,1,1,1
+access_edi_product_slit_line,edi.product.slit.line,model_edi_product_slit_line,base.group_user,1,1,1,1
+access_edi_slitting_order,edi.slitting.order,model_edi_slitting_order,base.group_user,1,1,1,1
+access_edi_slitting_order_line,edi.slitting.order.line,model_edi_slitting_order_line,base.group_user,1,1,1,1
+access_edi_slitting_order_lot,edi.slitting.order.lot,model_edi_slitting_order_lot,base.group_user,1,1,1,1
+access_edi_slit_coil_order_queue,edi.slit.coil.order.queue,model_edi_slit_coil_order_queue,base.group_user,1,1,1,1
+access_edi_slit_coil_order_queue_line,edi.slit.coil.order.queue.line,model_edi_slit_coil_order_queue_line,base.group_user,1,1,1,1
+access_edi_bulk_coil_order_queue,edi.bulk.coil.order.queue,model_edi_bulk_coil_order_queue,base.group_user,1,1,1,1
+access_edi_bulk_coil_order_queue_line,edi.bulk.coil.order.queue.line,model_edi_bulk_coil_order_queue_line,base.group_user,1,1,1,1
+access_edi_bulk_coil_line,edi.bulk.coil.line,model_edi_bulk_coil_line,base.group_user,1,1,1,1
+access_common_log_book_edi,Common Log Book,model_common_log_book_edi,base.group_user,1,1,1,1
+access_common_log_lines_edi,Common Log Lines,model_common_log_lines_edi,base.group_user,1,1,1,1

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_so_line_lengths,so.line.lengths,model_so_line_lengths,base.group_user,1,1,1,1
+access_so_line_lengths_punch,so.line.lengths.punch,model_so_line_lengths_punch,base.group_user,1,1,1,1
+access_so_line_bundles,so.line.bundles,model_so_line_bundles,base.group_user,1,1,1,1
+access_so_line_bundles_lines,so.line.bundles.lines,model_so_line_bundles_lines,base.group_user,1,1,1,1
+access_so_punch_type,so.punch.type,model_so_punch_type,base.group_user,1,1,1,1

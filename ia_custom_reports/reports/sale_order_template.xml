@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_order_templates_inherited" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="attributes">
+            <attribute name="t-call">web.basic_layout</attribute>
+        </xpath>
+        <xpath expr="//div[1]" position="replace">
+        </xpath>
+        <xpath expr="//div[2]" position="replace">
+        </xpath>
+        <xpath expr="//t[@t-set='forced_vat']" position="replace">
+        </xpath>
+        <xpath expr="//div[3]" position="replace">
+        </xpath>
+        <xpath expr="//div[hasclass('page')]" position="replace">
+            <div class="page">
+                <h1 style="font-size:10px;">
+                    <span t-if="res_company.name" t-field="res_company.name"/>
+                    <span t-if="res_company.street" t-field="res_company.street"/>
+                    <span t-if="res_company.street2" t-field="res_company.street2"/>
+                    <br/>
+                    <span t-if="res_company.zip" t-field="res_company.zip"/>
+                    <span t-if="res_company.city" t-field="res_company.city"/>
+                    <span t-if="res_company.country_id" t-field="res_company.country_id"/>
+                    <h2 style="margin-left:520px;margin-top:-40px;font-size:25px;">
+                        <strong>ORDER CONFIRMATION</strong>
+                    </h2>
+                </h1>
+                <h3 style="border-bottom: 1px solid black">
+                </h3>
+                <div class="col-5">
+                    <table class="table table-bordered"
+                           style="border: 1px;border-radius: 5px;solid black;margin-left:44px;margin-top:40px;width:155px;">
+                        <td>
+                            <strong>
+                                <span t-field="doc.partner_id.name" class="m-0"/>
+                                <br/>
+                                <span t-field="doc.partner_id.street" class="m-0"/>
+                                <br/>
+                                <span t-field="doc.partner_id.street2" class="m-0"/>
+                                <br/>
+                                <span t-field="doc.partner_id.city" class="m-0"/>
+                                <br/>
+                                <span t-field="doc.partner_id.country_id" class="m-0"/>
+                            </strong>
+                        </td>
+                    </table>
+                </div>
+                <img src="/ia_custom_reports/static/description/logo.png" class="float-end"
+                     style="margin-top:-145px;width:265px;"
+                     alt="Logo"/>
+                <div class="float-end">
+                    <div t-if="doc.date_order">
+                        <strong>Order Date :</strong>
+                        <span t-field="doc.date_order" class="m-0"/>
+                    </div>
+                    <div t-if="doc.partner_id">
+                        <strong>Phone :</strong>
+                        <span t-field="doc.partner_id.phone" class="m-0"/>
+                    </div>
+                    <div t-if="doc.partner_id">
+                        <strong>Fax :</strong>
+                        <span t-field="doc.partner_id.zip" class="m-0"/>
+                    </div>
+                    <div t-if="doc.partner_id.city">
+                        <strong>Area :</strong>
+                        <span t-field="doc.partner_id.city" class="m-0"/>
+                    </div>
+
+                </div>
+                <t t-set="lines_to_report" t-value="doc._get_order_lines_to_report()"/>
+                <t t-set="display_discount" t-value="any(l.discount for l in lines_to_report)"/>
+                <div t-if="doc.name" style="width:460px;margin-left:20px;"
+                     class="row mt-4 mb-4">
+                    <div class="col-auto col-3 mw-100 mb-2" style="margin-top:180px;">
+                        <strong>Cust Order NO :</strong>
+                        <p class="m-0" t-field="doc.name"/>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2" style="margin-top:180px;">
+                        <strong>Expiration:</strong>
+                        <p class="m-0" t-field="doc.validity_date"/>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2" style="margin-top:180px;">
+                        <strong>Order BY:</strong>
+                        <p class="m-0" t-field="doc.user_id"/>
+                    </div>
+                </div>
+
+                <table class="table table-bordered"
+                       style="border: 1px;border-radius: 5px;solid black;width:95%;margin: auto;">
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_description" class="text-start">Description</th>
+                            <th name="th_quantity" class="text-end">Quantity</th>
+                            <th name="th_length" class="text-end">Length</th>
+                            <th name="th_total_meterage" class="text-end">Total Meterage</th>
+                            <th name="th_priceunit" class="text-end">Rate</th>
+                            <th name="th_priceunit" class="text-end">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sale_tbody">
+
+                        <t t-set="current_subtotal" t-value="0"/>
+
+                        <t t-foreach="lines_to_report" t-as="line">
+
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
+                               groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
+                               groups="account.group_show_line_subtotals_tax_included"/>
+
+                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td name="td_name">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <td name="td_quantity" class="text-end">
+                                        <span t-field="line.product_uom_qty"/>
+                                        <span t-field="line.product_uom"/>
+                                    </td>
+                                    <td name="td_length" class="text-end">
+                                        <span t-field="line.product_uom"/>
+                                    </td>
+                                    <td name="td_total_meterage" class="text-end">
+                                        <span t-field="line.product_uom"/>
+                                    </td>
+                                    <td name="td_priceunit" class="text-end">
+                                        <span t-field="line.price_unit"/>
+                                    </td>
+                                    <td t-if="not line.is_downpayment" name="td_subtotal"
+                                        class="text-end o_price_total">
+                                        <span t-field="line.price_subtotal"
+                                              groups="account.group_show_line_subtotals_tax_excluded"/>
+                                    </td>
+                                </t>
+                                <t t-elif="line.display_type == 'line_section'">
+                                    <td name="td_section_line" colspan="99">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-elif="line.display_type == 'line_note'">
+                                    <td name="td_note_line" colspan="99">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section') and not line.is_downpayment">
+                                <tr class="is-subtotal text-end">
+                                    <td name="td_section_subtotal" colspan="99">
+                                        <strong class="mr16">Subtotal</strong>
+                                        <span
+                                                t-out="current_subtotal"
+                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered"
+                       style="border: 1px;border-radius: 5px;solid black;width:95%;margin: auto;">
+                    <tr>
+                        <th class="text-start">Weight :</th>
+                        <th class="text-start">Items :</th>
+                    </tr>
+                </table>
+                <div>
+                    <p style="margin-left:90px;">Delivery Instructions :</p>
+                    <table style="margin-left:645px;height:105px;width:177px;margin-top:-104px;">
+                        <strong>
+                            <tr style="margin-left:660px;">
+                                <p style="margin-left:520px;margin-bottom:12px;">Taxable Value $:</p>
+                                <td>
+                                    &#160;&#160;&#160;<span t-esc="doc.amount_untaxed"/>
+                                </td>
+                            </tr>
+                        </strong>
+                        <strong>
+                            <tr style="margin-left:660px;">
+                                <p style="margin-left:520px;margin-bottom:10px;">G.S.T:</p>
+                                <td>
+                                    &#160;&#160;&#160;<span t-esc="doc.amount_total- doc.amount_untaxed"
+                                                            t-options="{'widget': 'float', 'precision': 2}"/>
+                                </td>
+                            </tr>
+                        </strong>
+                        <strong>
+                            <tr style="margin-left:660px;">
+                                <p style="margin-left:520px;margin-bottom:8px;">Total (AUD) $:</p>
+                                <td>
+                                    &#160;&#160;&#160;<span t-esc="doc.amount_total"/>
+                                </td>
+                            </tr>
+                        </strong>
+                    </table>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!--    Sale Order Header-->
+
+    <template id="order_template_layout_id" inherit_id="web.external_layout_striped">
+        <xpath expr="//div[hasclass('o_background_header')]" position="replace">
+            <div class="o_background_header">
+            </div>
+        </xpath>
+
+    </template>
+    <template id="report_saleorder_custom">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="ia_custom_reports.sale_order_templates_inherited" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

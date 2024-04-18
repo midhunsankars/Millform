@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_edi_bulk_coil_order_queue_line_form" model="ir.ui.view">
+            <field name="name">edi.bulk.coil.order.queue.line.form</field>
+            <field name="model">edi.bulk.coil.order.queue.line</field>
+            <field name="arch" type="xml">
+                <form create="0" edit="0" delete="0">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly=""/>
+                            </group>
+                            <group>
+                                <field name="bulk_coil_order_queue_id" string="Order Data Queue" readonly="1"/>
+                                <field name="state" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Log Lines">
+                                <field name="common_log_lines_ids">
+                                    <tree create="false" editable="bottom">
+                                        <field name="message"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Data">
+                                <group>
+                                    <field string="Data" name="order_data" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Form view of order queue-->
+        <record id="view_edi_bulk_coil_order_queue_form" model="ir.ui.view">
+            <field name="name">edi.bulk.coil.order.queue.form</field>
+            <field name="model">edi.bulk.coil.order.queue</field>
+            <field name="arch" type="xml">
+                <form create="0" edit="0">
+                    <header>
+                        <button name="process_order_queue_manually"
+                            string="Process Queue Manually"
+                            type="object" class="btn-primary"
+                            invisible="is_process_queue or state == 'completed'"/>
+                        <field name="is_process_queue" invisible="1"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button id="order_queue_line_total" class="oe_stat_button" disabled="1"
+                                    icon="fa-database">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="order_queue_line_total_record"/>
+                                    </span>
+                                    <span class="o_stat_text">Records</span>
+                                </div>
+                            </button>
+
+                            <button id="order_queue_line_draft" class="oe_stat_button" disabled="1"
+                                    icon="fa-info">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="order_queue_line_draft_record"/>
+                                    </span>
+                                    <span class="o_stat_text">Draft</span>
+                                </div>
+                            </button>
+                            <button id="order_queue_line_fail" class="oe_stat_button" disabled="1"
+                                    icon="fa-times"
+                                    invisible="state == 'partially_completed'">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="order_queue_line_fail_record"/>
+                                    </span>
+                                    <span class="o_stat_text">Failed</span>
+                                </div>
+                            </button>
+                            <button id="order_queue_line_fail_sub" class="oe_stat_button" disabled="1"
+                                    invisible="state != 'partially_completed'">
+                                <span class="fa-stack fa-lg"
+                                      style="padding-top: 6px; margin-left:2px; margin-top:2PX; font-size: 22px; color:#ff0000;">
+                                    <i class="fa fa-times-circle" title="Time Circle"
+                                       style="margin-left:18px;"/>
+                                </span>
+                                <field name="order_queue_line_fail_record" widget="statinfo"
+                                       string="Failed"/>
+                            </button>
+                            <button id="order_queue_line_done" class="oe_stat_button" disabled="1"
+                                    icon="fa-check"
+                                    invisible="state == 'completed'">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="order_queue_line_done_record"/>
+                                    </span>
+                                    <span class="o_stat_text">Done</span>
+                                </div>
+                            </button>
+                            <button id="order_queue_line_done_sub" class="oe_stat_button" disabled="1"
+                                    invisible="state != 'completed'">
+                                <span class="fa-stack fa-lg"
+                                      style="padding-top: 6px; margin-left:15px; color:#00ff00;">
+                                    <i class="fa fa-check fa-stack-1x" style="margin-left:4px;" title="Stack 1x"/>
+                                    <i class="fa fa-check fa-inverse fa-stack-1x"
+                                       style="margin-left:-3px;" title="Stack Inverse 1x"/>
+                                    <i class="fa fa-check  fa-stack-1x"
+                                       style="margin-left:-4px" title="Stack 1x"/>
+                                </span>
+                                <field name="order_queue_line_done_record" widget="statinfo"
+                                       string="Done"/>
+                            </button>
+                            <button id="order_queue_line_cancel" class="oe_stat_button" disabled="1"
+                                    icon="fa-ban">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="order_queue_line_cancel_record"/>
+                                    </span>
+                                    <span class="o_stat_text">cancelled</span>
+                                </div>
+                            </button>
+                            <button type="object" name="action_view_bulk"
+                              class="oe_stat_button" icon="fa-book" string="View Bulk Lines">
+                            </button>
+                        </div>
+                        <div>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <label for="create_date" string="Imported at"/>
+                                <field name="create_date" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="common_log_book_id" string="Log Book"
+                                   readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Data Lines">
+                                <field name="order_data_queue_line_ids" readonly="True">
+                                    <tree create="false" editable="bottom"
+                                      decoration-danger="state=='failed'"
+                                      decoration-success="state=='done'"
+                                      decoration-info="state=='draft'">
+                                        <field name="name"/>
+                                        <field name="write_date" string="Last Updated On"/>
+                                        <field name="order_data" invisible="1"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Log Lines">
+                                <field name="common_log_lines_ids">
+                                    <tree create="false" editable="bottom">
+                                        <field name="edi_bulk_coil_order_queue_line_id"/>
+                                        <field name="message"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"
+                               groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!--Tree view of order queue-->
+        <record id="view_edi_bulk_coil_order_queue_tree" model="ir.ui.view">
+            <field name="name">edi.bulk.coil.order.queue.tree</field>
+            <field name="model">edi.bulk.coil.order.queue</field>
+            <field name="arch" type="xml">
+                <tree create="0" default_order="name desc">
+                    <field name="name"/>
+                    <field name="create_date"/>
+                    <field name="activity_ids" widget="list_activity"/>
+                    <field name="is_process_queue" invisible="1"/>
+                    <field name="running_status" invisible="not is_process_queue"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Action of Unshipped order data queue-->
+    <record id="action_edi_bulk_coil_order_queue" model="ir.actions.act_window">
+        <field name="name">EDI Bulk Coil Order Queues</field>
+        <field name="res_model">edi.bulk.coil.order.queue</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_edi_bulk_coil_order_queue_tree"/>
+        <field name="help" type="html">
+            <div class="oe_empty_shopify_instance">
+                <br/>
+                <br/>
+                <br/>
+                <p>
+                    <b>There is No Synced Data yet...</b>
+                </p>
+            </div>
+        </field>
+    </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="seq_edi_product_slit" model="ir.sequence">
+        <field name="name">EDI Product Slit</field>
+        <field name="code">edi.product.slit</field>
+        <field name="prefix">SLIT/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_edi_slit_coil_order_queue" model="ir.sequence">
+        <field name="name">Edi Slit Coil Order Queue</field>
+        <field name="code">edi.slit.coil.order.queue</field>
+        <field name="prefix">SLC</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_edi_bulk_coil_order_queue" model="ir.sequence">
+        <field name="name">Edi Bulk Coil Order Queue</field>
+        <field name="code">edi.bulk.coil.order.queue</field>
+        <field name="prefix">BLC</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_common_log_book_edi" model="ir.sequence">
+        <field name="name">Sequence Common Log Book</field>
+        <field name="code">common.log.book.edi</field>
+        <field name="prefix">E-LOG</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="0"/>
+    </record>
+
+</odoo>

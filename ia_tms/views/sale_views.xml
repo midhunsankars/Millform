@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ia_tms_view_bundle_tree" model="ir.ui.view">
+        <field name="name">so.line.bundles.tree</field>
+        <field name="model">so.line.bundles</field>
+        <field eval="180" name="priority"/>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="sale_id"/>
+                <field name="so_line_id"/>
+                <field name="delivery_partner_id"/>
+                <field name="warehouse_id"/>
+                <field name="pack"/>
+                <field name="total_pack"/>
+                <field name="pack_qty"/>
+                <field name="longest_length"/>
+                <field name="weight"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="ia_tms_view_bundle_tree_transfer" model="ir.ui.view">
+        <field name="name">so.line.bundles.tree</field>
+        <field name="model">so.line.bundles</field>
+        <field eval="180" name="priority"/>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="sale_id"/>
+                <field name="so_line_id"/>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+                <field name="pack"/>
+                <field name="total_pack"/>
+                <field name="pack_qty"/>
+                <field name="longest_length"/>
+                <field name="weight"/>
+            </tree>
+        </field>
+    </record>
+    <record id="ia_tms_view_so_line_search" model="ir.ui.view">
+        <field name="name">so.line.bundles.search</field>
+        <field name="model">so.line.bundles</field>
+        <field name="arch" type="xml">
+            <search>
+                <group string="Group By..." expand="0" name="groupby">
+                    <filter string="Sale Order" name="group_so_id" context="{'group_by': 'sale_id'}"/>
+                    <filter string="Sale Order Line" name="group_so_line_id" context="{'group_by': 'so_line_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="ia_tms_view_so_line_action" model="ir.actions.act_window">
+        <field name="name">Delivery</field>
+        <field name="res_model">so.line.bundles</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="ia_tms_view_bundle_tree"/>
+        <field name="domain">
+            [('so_line_id.order_id.state','in',('sale','done')),('outgoing_id','!=',False),('load_delivery_id','=',
+            False)]
+        </field>
+        <field name="context">{'tran_type':'sale'}</field>
+    </record>
+
+    <record id="ia_tms_view_tr_line_action" model="ir.actions.act_window">
+        <field name="name">Transfer</field>
+        <field name="res_model">so.line.bundles</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="ia_tms_view_bundle_tree_transfer"/>
+        <field name="domain">
+            [('so_line_id.order_id.state','in',('sale','done')),('internal_id','!=',False),('load_internal_id','=',
+            False)]
+        </field>
+        <field name="context">{'tran_type':'internal'}</field>
+    </record>
+
+    <menuitem
+            id="ia_tms_view_so_line_menu"
+            parent="menu_main_tms_loads"
+            name="Delivery"
+            action="ia_tms_view_so_line_action"
+            sequence="1"
+    />
+    <menuitem
+            id="ia_tms_view_tr_line_menu"
+            parent="menu_main_tms_loads"
+            name="Transfer"
+            action="ia_tms_view_tr_line_action"
+            sequence="2"
+    />
+
+</odoo>

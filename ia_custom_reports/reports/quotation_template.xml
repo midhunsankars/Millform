@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Quotation-->
+    <template id="report_quotation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <div style="text-align:right;">
+                        <img src="/ia_custom_reports/static/description/logo.png" class="float-end"
+                             style="max-height: 45px;margin-top:17px;width:145px;"
+                             alt="Logo"/>
+                    </div>
+                    <div style="text-align:left;font-size:10px;margin-top:27px;">
+                        <ul>
+                            <h1 style="font-size:20px;">
+                                <strong>QUOTATION</strong>
+                            </h1>
+                            <span t-if="res_company.name" t-field="res_company.name"/>
+                            <span t-if="res_company.street" t-field="res_company.street"/>
+                            <span t-if="res_company.street2" t-field="res_company.street2"/>
+                            <br/>
+                            <span t-if="res_company.zip" t-field="res_company.zip"/>
+                            <span t-if="res_company.city" t-field="res_company.city"/>
+                            <span t-if="res_company.country_id" t-field="res_company.country_id"/>
+                        </ul>
+                    </div>
+                    <h3 style="border-bottom: 1px solid black">
+                    </h3>
+                    <!--                    <p style="text-align:right;font-size:28px;">Where Strength Matters</p>-->
+                    <div style="text-align:right;">
+                        <div t-if="doc.name">
+                            <strong>Quote Number :</strong>
+                            <span t-field="doc.name" class="m-0"/>
+                        </div>
+                        <div t-if="doc.date_order">
+                            <strong>Quote Date :</strong>
+                            <span t-field="doc.date_order" class="m-0"/>
+                        </div>
+                        <div t-if="doc.partner_id">
+                            <strong>Expiration Date:</strong>
+                            <span t-field="doc.validity_date" class="m-0"/>
+                        </div>
+                        <div>
+                            <strong>Account Manager :</strong>
+                            <span class="m-0"/>
+                        </div>
+
+                        <div t-if="doc.partner_id">
+                            <strong>Mobile :</strong>
+                            <span t-field="doc.partner_id.mobile" class="m-0"/>
+                        </div>
+                    </div>
+                    <div style="margin-left:66px;">Prepared For :</div><br/>
+                    <div class="col-5">
+                        <table class="table table-bordered"
+                               style="border: 1px;border-radius: 5px;solid black;width=80%;height:100px;margin-left:66px;">
+                            <td>
+                                <strong>
+                                    <span t-field="doc.partner_id.name" class="m-0"/>
+                                    <br/>
+                                    <span t-field="doc.partner_id.street" class="m-0"/>
+                                    <br/>
+                                    <span t-field="doc.partner_id.street2" class="m-0"/>
+                                    <br/>
+                                    <span t-field="doc.partner_id.city" class="m-0"/>
+                                    <br/>
+                                    <span t-field="doc.partner_id.country_id" class="m-0"/>
+                                </strong>
+                            </td>
+                        </table>
+                    </div>
+                    <div style="margin-left:66px;">Job Name :</div><br/>
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <!-- Is there a discount on at least one line? -->
+                        <t t-set="lines_to_report" t-value="doc._get_order_lines_to_report()"/>
+                        <t t-set="display_discount" t-value="any(l.discount for l in lines_to_report)"/>
+
+                        <table class="table table-bordered"
+                               style="border: 1px;border-radius: 5px;solid black;width:90%;margin: auto;">
+                            <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                            <thead style="display: table-row-group;background-color: #009A49;">
+                                <tr>
+                                    <th class="text-start">STOCK CODE</th>
+                                    <th name="th_description" class="text-start">DESCRIPTION</th>
+                                    <th name="th_additional_specification" class="text-end">ADDITIONAL SPECIFICATION
+                                    </th>
+                                    <th name="th_qty" class="text-start">QTY</th>
+                                    <th name="th_uom" class="text-start">UoM</th>
+                                    <th name="th_customer_price" class="text-end">CUSTOMER PRICE</th>
+                                    <th name="th_net_total" class="text-end">NET TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody class="sale_tbody">
+
+                                <t t-set="current_subtotal" t-value="0"/>
+
+                                <t t-foreach="lines_to_report" t-as="line">
+
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
+                                       groups="account.group_show_line_subtotals_tax_excluded"/>
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
+                                       groups="account.group_show_line_subtotals_tax_included"/>
+
+                                    <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                        <t t-if="not line.display_type">
+                                            <td name="td_name">
+<!--                                                <span t-field="line.stock_code"/>-->
+                                            </td>
+                                            <td name="td_name">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td name="td_name">
+
+                                            </td>
+
+                                            <td name="td_quantity" class="text-end">
+                                                <span t-field="line.product_uom_qty"/>
+                                            </td>
+                                            <td name="td_uom" class="text-end">
+                                                <span t-field="line.product_uom"/>
+                                            </td>
+
+                                            <td name="td_priceunit" class="text-end">
+                                                <span t-field="line.price_unit"/>
+                                            </td>
+                                            <td name="td_price_subtotal" class="text-end">
+                                                <span t-field="line.price_subtotal"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <div t-if="doc.amount_untaxed" style="text-align:right;margin-right:40px;">
+                            <strong>Sub Total:
+                                <span t-esc="doc.amount_untaxed"/>
+                            </strong>
+
+                        </div>
+                        <div t-if="doc.amount_untaxed" style="text-align:right;margin-right:40px;">
+                            <strong>GST:
+                                <span t-esc="doc.amount_total- doc.amount_untaxed"
+                                      t-options="{'widget': 'float', 'precision': 2}"/>
+                            </strong>
+                        </div>
+                        <div t-if="doc.amount_total" style="text-align:right;margin-right:40px;">
+                            <strong>Amount:
+                                <span t-esc="doc.amount_total"/>
+                            </strong>
+
+                        </div><br/>
+                        <div style="margin-left:43px;text-align: left;">
+                             <span t-esc="doc.note"/>
+                        </div>
+                        <p style="margin-left:43px;">Delivery To :</p>
+                        <table class="table table-bordered"
+                               style="border: 1px;border-radius: 5px;solid black;width: 404px;height: 108px;margin-left:66px;">
+                            <td>
+                                <span t-field="doc.partner_shipping_id.name"/>
+                                <br/>
+                                <span t-field="doc.partner_shipping_id.street"/>
+                                <span t-field="doc.partner_shipping_id.street2"/>
+                                <span t-field="doc.partner_shipping_id.city"/>
+                                <span t-field="doc.partner_shipping_id.state_id.name"/>
+                                <br/>
+                                <span t-field="doc.partner_shipping_id.zip"/>
+                            </td>
+
+                        </table>
+                        <div style="margin-left:66px;" class="row mt-4 mb-4">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>PO Number:</strong>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Name :</strong>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Signature :</strong>
+                                <p t-field="doc.signed_by"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

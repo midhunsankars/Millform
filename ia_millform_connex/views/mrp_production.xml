@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mrp_production_form_view" model="ir.ui.view">
+        <field name="name">mrp.production.form.inherit.ia_millform_connex</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//header//button[@name='action_cancel']" position="after">
+                <field name='connex_status' invisible='1'/>
+                <button name="button_send_to_connex" type="object" class="oe_highlight" string="Send To Connex" invisible="state not in ['confirmed', 'progress', 'to_close'] or connex_status != 'not_sent'"/>
+                <button name="button_fetch_connex_production" type="object" class="oe_highlight" string="Fetch Connex" invisible="state not in ['confirmed', 'progress', 'to_close'] or connex_status != 'ask_for_status'"/>
+                <button name="button_auto_validate" type="object" class="oe_highlight" string="Auto Validate" invisible="state not in ['confirmed', 'progress', 'to_close']"/>
+            </xpath>
+            <page name="miscellaneous" position="inside">
+                <group colspan="4">
+                    <field colspan="2" name="connex_production_response" nolabel="1"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="is_mts"/>
+                        <field name="connex_workcenter_id" />
+                    </group>
+                </group>
+            </page>
+        </field>
+    </record>
+
+</odoo>

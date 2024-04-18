@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_inherited" model="ir.ui.view">
+        <field name="name">product.template.form.inherited</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="ia_master_data.ia_product_template_only_form_view_1"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='custom_fields']/group/group/field[@name='qty_per_pack']" position="before">
+                <field name="workcenter_ids" widget="many2many_tags"/>
+                <field name="cartridge_no"/>
+                <field name="cartridge_setup_time"/>
+                <field name="profile_setup_time"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

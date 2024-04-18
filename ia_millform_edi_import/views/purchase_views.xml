@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="purchase_order_view_form_inherit_ia_millform_edi_import" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="is_slit_order" widget="boolean_toggle"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
+                    <button name="action_view_slit_order" string="Slit Order" type="object" class="btn-primary" column_invisible="not parent.is_slit_order"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_order_view_form_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase_stock.purchase_order_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='picking_type_id']" position="attributes">
+                    <attribute name="domain">["&amp;", ("code", "=", "incoming"), "&amp;", ("return_picking_type_id", "!=", False), "|", ("warehouse_id", "=", False), ("warehouse_id.company_id", "=", 1)]</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- TMS Menu -->
+        <menuitem id="menu_tms" name="TMS" parent="stock.menu_stock_root" sequence="5"/>
+        <menuitem id="menu_tms_master" name="Master Data" parent="menu_tms" sequence="1"/>
+        <menuitem id="menu_tms_ops" name="Operations" parent="menu_tms" sequence="2"/>
+
+        <menuitem id="menu_main_tms_loads" parent="menu_tms" name="Allocation" sequence="1"/>
+
+    </data>
+</odoo>

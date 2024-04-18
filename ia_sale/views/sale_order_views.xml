@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Inherit Sales Order -->
+    <record model="ir.ui.view" id="ia_sale_line_details_button">
+        <field name="name">ia_sale_line_details_button</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='name']" position="before">
+                <field name="stock_code"/>
+                <field name="can_be_punched" invisible="1"/>
+                <field name="is_punched" readonly="can_be_punched == 'no'"/>
+                <field name="packs" optional="hide"/>
+                <field name="rack_no" optional="hide"/>
+                <field name="machine_number" optional="hide"/>
+                <field name="mlock" optional="hide"/>
+                <field name="spec_mrp_notes" optional="hide"/>
+                <field name="manufactured" optional="hide"/>
+                <field name="manufactured_time" optional="hide"/>
+                <field name="tick_urgent" optional="hide"/>
+                <field name="wrap_in_plastic" optional="hide"/>
+                <field name="ams_id" optional="hide"/>
+                <field name="bundle_ref" optional="hide"/>
+                <field name="qty_per_pack" optional="hide"/>
+                <field name="line_12_step" optional="hide"/>
+                <field name="bundle_limit_t" optional="hide"/>
+                <field name="bundle_step" optional="hide"/>
+                <field name="sticker_print_option" optional="hide"/>
+                <field name="partner_cover_sheet" string="Cover Sheet" invisible="1"/>
+                <field name="cover_sheet_available" invisible="1"/>
+                <field name="cover_sheet" string="Cover Sheet" optional="hide" readonly="cover_sheet_available == 'no' or partner_cover_sheet not in ['top','top_bottom']"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
+                <button name="open_form" string="Details" type="object"/>
+            </xpath>
+            <xpath expr="//page[@name='other_information']" position="after">
+                <page string="Extra Fields" name="extra_fields">
+                    <group>
+                        <group>
+                            <field name="area_id"/>
+                            <field name="delivery_type"/>
+                            <field name="on_hold"/>
+                            <field name="has_request_data"/>
+							<field name="job_reference"/>
+							<field name="freight_charge"/>
+							<field name="time_slot"/>
+                        </group>
+                        <group>
+                            <field name="ready_to_check"/>
+                            <field name="checked"/>
+                            <field name="sent_to_production"/>
+                            <field name="engineering_narration"/>
+                            <field name="difot_error"/>
+							<field name="crane_required"/>
+                            <field name="time_available" widget='timepicker'/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- New Form view for Sales Order Lines -->
+    <record model="ir.ui.view" id="ia_sale_order_lines">
+        <field name="name">ia_sale_order_lines</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+
+            <form string="Sales Order Lines">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id" readonly="1"/>
+                            <field name="product_uom_qty" readonly="1"/>
+                            <field name="product_uom" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="price_unit" readonly="1"/>
+                            <field name="price_subtotal" widget="monetary"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Lengths" name="so_line_lengths">
+                            <field name="so_line_lengths">
+                                <tree>
+                                    <field name="quantity"/>
+                                    <field name="length"/>
+                                    <field name="marking"/>                                                                  
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="quantity"/>
+                                        <field name="length"/>
+                                        <field name="marking"/>
+                                    </group>
+                                    <notebook>
+                                        <page string="Lengths Punch" name="so_line_lengths_punch">
+                                            <field name="so_line_lengths_punch">
+                                                <tree editable="top">
+                                                    <field name="dimension"/>
+                                                    <field name="punch_type_id"/>
+                                                    <field name="y_plus1"/>
+                                                    <field name="y_minus1"/>
+                                                    <field name="y_plus2"/>
+                                                    <field name="y_minus2"/>
+                                                </tree>
+                                            </field>
+                                        </page>
+                                    </notebook>
+                                </form>
+                            </field>
+                            <group>
+                                <field name="total_quantity"/>
+                                <field name="total_meter"/>
+                                <field name="reduce_meter"/>
+                            </group>   
+                        </page>
+
+                        <page string="Bundles" name="so_line_bundles">
+                            <field name="so_line_bundles">
+                                <tree>
+                                    <field name="pack"/>
+                                    <field name="total_pack"/>
+                                    <field name="pack_qty"/>
+                                    <field name="longest_length"/>
+                                    <field name="weight"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="pack"/>
+                                        <field name="total_pack"/>
+                                        <field name="pack_qty"/>
+                                        <field name="longest_length"/>
+                                        <field name="weight"/>
+                                    </group>
+                                    <notebook>
+                                        <page string="Bundle Lines" name="so_line_bundle_lines">
+                                            <field name="so_line_bundle_lines">
+                                                <tree editable="top">
+                                                    <field name="quantity"/>
+                                                    <field name="length"/>
+                                                    <field name="marking"/>
+                                                    <field name="so_line_length_id" optional="hide"/>
+                                                </tree>
+                                            </field>
+                                        </page>
+                                    </notebook>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <!-- parent menu_sales_config -->
+    <record id="so_punch_type_tree" model="ir.ui.view">
+        <field name="name">so_punch_type_tree</field>
+        <field name="model">so.punch.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="so_punch_type_form" model="ir.ui.view">
+        <field name="name">so_punch_type_form</field>
+        <field name="model">so.punch.type</field>
+        <field name="arch" type="xml">
+            <form string="Punch Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+							<field name="press_number"/>
+							<field name="y_plus_1"/>
+							<field name="y_plus_2"/>
+							<field name="punchanywhereoption"/>
+							<field name="std_ends_center"/>
+							<field name="stock_code"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+							<field name="punch_name"/>
+							<field name="y_minus_1"/>
+							<field name="y_minus_2"/>
+							<field name="victorian_punching70mm"/>
+                            <field name="edit_y_dims"/>
+							<field name="active"/>
+							<field name="product_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_so_punch_type" model="ir.actions.act_window">
+        <field name="name">Punch Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">so.punch.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_so_punch_type"
+        action="action_so_punch_type"
+        parent="sale.menu_sales_config"
+        sequence="10"/>
+
+    
+
+    <record id="product_category_form_view" model="ir.ui.view">
+        <field name="name">product.category.form.inherit.ia</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <group name="first" position="after">
+                <group name="bridging" col="2">
+                    <field name="bridging" widget="boolean_toggle"/>
+                </group>               
+            </group>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="edi_import_slitlist_view_tree" model="ir.ui.view">
+            <field name="name">edi_import_slitlist_view_tree</field>
+            <field name="model">edi.import.slitlist</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="is_no_header"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="edi_import_slitlist_view_form" model="ir.ui.view">
+            <field name="name">edi_import_slitlist_view_form</field>
+            <field name="model">edi.import.slitlist</field>
+            <field name="arch" type="xml">
+                <form string="EDI Import Slitlist">
+                    <header>
+                        <button name="import_file_edi" string="Import EDI" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,imported"/>
+                    </header>
+                    <sheet>
+                        <field name="product_slit_lines" invisible="1"/>
+                        <div name="button_box" class="oe_button_box">
+                            <button name="action_view_slit"
+                                    class="oe_stat_button"
+                                    icon="fa-pencil-square-o"
+                                    type="object"
+                                    invisible="product_slit_lines == []"
+                                    string="Slit">
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="file_name" invisible="1" />
+                                <field name="import_file" filename="file_name" />
+                            </group>
+                            <group>
+                                <field name="is_no_header" widget="boolean_toggle"/>
+                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Import Lines" name="order_lines">
+                                <field
+                                        name="import_lines"
+                                        mode="tree"
+                                        readonly="1"
+                                >
+                                    <tree
+                                            string="Import Lines"
+                                            editable="bottom"
+                                    >
+                                        <field name="order_id" options='{"no_open": True, "no_create": True}'
+                                               optional="show"
+                                               column_invisible="parent.is_no_header"/>
+                                        <field name="po_number"
+                                               column_invisible="parent.is_no_header"/>
+                                        <field name="master_coil"
+                                               column_invisible="parent.is_no_header"/>
+                                        <field name="batch_id"
+                                               column_invisible="parent.is_no_header"/>
+                                        <field name="product_code"
+                                               column_invisible="parent.is_no_header"/>
+                                        <field name="product_id" options='{"no_open": True, "no_create": True}'
+                                               optional="show"
+                                        />
+                                        <field name="coil_weight"
+                                               column_invisible="parent.is_no_header"/>
+                                        <field name="process_charge"
+                                               column_invisible="parent.is_no_header"/>
+                                        <!-- Without Header -->
+                                        <field name="internal_ref"
+                                               column_invisible="not parent.is_no_header"/>
+                                        <field name="supplier_bulk_product_code"
+                                               column_invisible="not parent.is_no_header"/>
+                                        <field name="bulk_sn"
+                                               column_invisible="not parent.is_no_header"/>
+                                        <field name="supplier_slit_product_code"
+                                               column_invisible="not parent.is_no_header"/>
+                                        <field name="slit_sn"
+                                               column_invisible="not parent.is_no_header"/>
+                                        <field name="output_qty"
+                                               column_invisible="not parent.is_no_header"/>
+                                        <field name="picking_id" options='{"no_open": True, "no_create": True}'
+                                               optional="show"
+                                        />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="edi_import_slitlist_action" model="ir.actions.act_window">
+            <field name="name">Import EDI Slitlist</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">edi.import.slitlist</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

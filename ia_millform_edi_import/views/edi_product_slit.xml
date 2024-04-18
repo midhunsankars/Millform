@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="edi_product_slit_view_tree" model="ir.ui.view">
+            <field name="name">edi_product_slit_view_tree</field>
+            <field name="model">edi.product.slit</field>
+            <field name="arch" type="xml">
+                <tree string="Slit Tree View">
+                    <field name="name"/>
+                    <field name="consumed_product_id"/>
+                    <field name="order_id"/>
+                    <field name="bulk_sn"/>
+                    <field name="quantity"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="edi_product_slit_view_form" model="ir.ui.view">
+            <field name="name">edi_product_slit_view_form</field>
+            <field name="model">edi.product.slit</field>
+            <field name="arch" type="xml">
+                <form string="Slit Form View">
+                    <header>
+                        <button name="action_process_slit" string="Transfer" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <field name="picking_id" invisible="1"/>
+                        <div name="button_box" class="oe_button_box">
+                            <button name="action_view_picking"
+                                    class="oe_stat_button"
+                                    icon="fa-pencil-square-o"
+                                    type="object"
+                                    invisible="not picking_id"
+                                    string="Transfer">
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="consumed_product_id" readonly="1" force_save="1" string="Product"/>
+                                <field name="order_id" readonly="1" force_save="1" string="Order No"/>
+                                <field name="company_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="move_line_id" readonly="1" force_save="1" invisible="1"/>
+                                <field name="lot_id" readonly="1" force_save="1" invisible="1"/>
+                                <field name="bulk_sn" readonly="1" force_save="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Slit Lines" name="lines">
+                                <field
+                                        name="lines"
+                                        mode="tree"
+                                        readonly="1"
+                                >
+                                    <tree
+                                            string="Slit Lines"
+                                            editable="bottom"
+                                    >
+                                        <field name="po_number"/>
+                                        <field name="vendor_product_code"/>
+                                        <field name="slit_sn"/>
+                                        <field name="coil_weight"/>
+                                        <field name="process_charge"/>
+                                        <field name="move_ids" widget="many2many_tags" optional="hide"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_qty"/>
+                                    <field name="quantity" readonly="1" force_save="1" string="Master Coil Qty"/>
+                                    <field name="total_margin" string="Waste % (+/3%)" decoration-success="total_margin &lt;= 3" decoration-danger="total_margin &gt; 3"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </page>
+                            <page string="Slit Order Details" name="slit_lines">
+                                <field name="slit_order_id" readonly="1" force_save="1" invisible="1"/>
+                                <field
+                                    name="slit_lines"
+                                    mode="tree"
+                                    string="Lines"
+                                >
+                                    <tree
+                                            string="Slit Lines"
+                                            editable="bottom"
+                                    >
+                                        <field name="product_id"/>
+                                        <field name="coil_width"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="edi_product_slit_view_action" model="ir.actions.act_window">
+            <field name="name">Product Slit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">edi.product.slit</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

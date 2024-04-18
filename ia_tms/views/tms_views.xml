@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TRUCKS -->
+    <record id="tms_trucks_tree" model="ir.ui.view">
+        <field name="name">tms_trucks_tree</field>
+        <field name="model">tms.trucks</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="rego"/>
+                <field name="capacity"/>
+                <field name="rate_km"/>
+                <field name="product_id"/>
+                <field name="partner_id" widget="res_partner_many2one"
+                       context="{'res_partner_search_mode': 'supplier', 'show_vat': True}"
+                       placeholder="Name, TIN, Email, or Reference"/>
+                <field name="mf_owned"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_tms_trucks" model="ir.actions.act_window">
+        <field name="name">Trucks</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tms.trucks</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+
+    <!-- TRAILERS -->
+    <record id="tms_trailers_tree" model="ir.ui.view">
+        <field name="name">tms_trailers_tree</field>
+        <field name="model">tms.trailers</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="rego"/>
+                <field name="capacity"/>
+                <field name="max_length"/>
+                <field name="mf_owned"/>
+                <field name="rate_trailer"/>
+                <field name="product_id"/>
+                <field name="partner_id" widget="res_partner_many2one"
+                       context="{'res_partner_search_mode': 'supplier', 'show_vat': True}"
+                       placeholder="Name, TIN, Email, or Reference"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_tms_trailers" model="ir.actions.act_window">
+        <field name="name">Trailers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tms.trailers</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <!-- DRIVERS -->
+    <record id="tms_drivers_tree" model="ir.ui.view">
+        <field name="name">tms_drivers_tree</field>
+        <field name="model">tms.drivers</field>
+        <field name="arch" type="xml">
+            <tree string="Drivers">
+                <field name="name"/>
+                <field name="mobile"/>
+                <field name="mf_driver"/>
+                <field name="rate_km"/>
+                <field name="rate_drop"/>
+                <field name="product_id"/>
+                <field name="partner_id" widget="res_partner_many2one"
+                       context="{'res_partner_search_mode': 'supplier', 'show_vat': True}"
+                       placeholder="Name, TIN, Email, or Reference"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="tms_drivers_form" model="ir.ui.view">
+        <field name="name">tms_drivers_form</field>
+        <field name="model">tms.drivers</field>
+        <field name="arch" type="xml">
+            <form string="Drivers">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="mobile"/>
+                        <field name="mf_driver"/>
+                        <field name="rate_km"/>
+                        <field name="rate_drop"/>
+                        <field name="product_id"/>
+                        <field name="partner_id" widget="res_partner_many2one"
+                               context="{'res_partner_search_mode': 'supplier', 'show_vat': True}"
+                               placeholder="Name, TIN, Email, or Reference"/>
+                    </group>
+                    <notebook>
+                        <page>
+
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tms_drivers" model="ir.actions.act_window">
+        <field name="name">Drivers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tms.drivers</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="tms_loads_form" model="ir.ui.view">
+        <field name="name">tms_loads_form</field>
+        <field name="model">tms.loads</field>
+        <field name="arch" type="xml">
+            <form string="Loads">
+                <header>
+                    <button name="button_allocate" type="object" class="oe_highlight" string="In Transit"
+                            invisible="state != 'new'"/>
+                    <button name="button_create_po" type="object" class="oe_highlight" string="Create PO"
+                            invisible="state != 'in_transit'"/>
+                    <button name="button_complete" type="object" class="oe_highlight" string="Complete"
+                            invisible="state != 'in_transit'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="load_date"/>
+                            <field name="load_duration_hrs"/>
+                            <field name="load_leave_days"/>
+                            <field name="load_leave_date"/>
+                            <field name="delivery_date"/>
+                            <field name="driver_id"/>
+                            <field name="truck_id"/>
+                            <field name="trailer_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="origin_id"/>
+                            <field name="destination_id"/>
+                            <field name="area_ids" widget="many2many_tags"/>
+                            <field name="capacity"/>
+                            <field name="length"/>
+                            <field name="main_type"/>
+                            <field name="total_km"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Load Lines" name="load_lines">
+                            <field name="load_line_ids">
+                                <tree editable="top">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="transfer_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="delivery_partner_id"/>
+                                    <field name="partner_latitude"/>
+                                    <field name="partner_longitude"/>
+                                    <field name="total_km"/>
+                                    <field name="transfer_group"/>
+                                    <field name="delivery_date"/>
+                                    <field name="type"/>
+                                    <field name="customer_notes"/>
+                                    <button name="open_form" string="Details" type="object"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tms_loads_tree" model="ir.ui.view">
+        <field name="name">tms_loads_tree</field>
+        <field name="model">tms.loads</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="load_date"/>
+                <field name="delivery_date"/>
+                <field name="origin_id"/>
+                <field name="destination_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tms_loads_calendar" model="ir.ui.view">
+        <field name="name">tms_loads_calendar</field>
+        <field name="model">tms.loads</field>
+        <field name="arch" type="xml">
+            <calendar string="Loads" date_start="load_date" color="state" hide_time="true" event_limit="5"
+                      quick_add="False">
+                <field name="name"/>
+                <field name="state" filters="1" invisible="1"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_tms_loads" model="ir.actions.act_window">
+        <field name="name">Loads</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tms.loads</field>
+        <field name="view_mode">tree,form,calendar</field>
+    </record>
+
+
+    <menuitem id="menu_tms_trucks"
+              action="action_tms_trucks"
+              parent="menu_tms_master"
+              sequence="1"/>
+
+    <menuitem id="menu_tms_trailers"
+              action="action_tms_trailers"
+              parent="menu_tms_master"
+              sequence="2"/>
+
+
+    <menuitem id="menu_tms_drivers"
+              action="action_tms_drivers"
+              parent="menu_tms_master"
+              sequence="3"/>
+
+    <menuitem id="menu_tms_loads"
+              action="action_tms_loads"
+              parent="menu_tms_ops"
+              sequence="1"/>
+
+</odoo>

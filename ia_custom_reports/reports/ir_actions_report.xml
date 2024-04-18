@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_pdf_quote_builder.action_report_saleorder_raw" model="ir.actions.report">
+        <field name="name">Order</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ia_custom_reports.report_saleorder_custom</field>
+        <field name="report_file">ia_custom_reports.report_saleorder_custom</field>
+        <field name="print_report_name">(object.state in ('sent') or 'Order - %s' % (object.name))</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="ia_custom_reports.sale_order_paper_format_id"/>
+    </record>
+    <record id="action_report_quotation" model="ir.actions.report">
+        <field name="name">Quotation</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ia_custom_reports.report_quotation</field>
+        <field name="report_file">ia_custom_reports.report_quotation</field>
+        <field name="print_report_name">(object.state in ('draft') and 'Quotation - %s' % (object.name))
+        </field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="ia_custom_reports.quotation_paper_format_id"/>
+    </record>
+    <record id="purchase.action_report_purchase_order" model="ir.actions.report">
+        <field name="name">Purchase Order</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ia_custom_reports.report_purchaseorder</field>
+        <field name="report_file">ia_custom_reports.report_purchaseorder</field>
+        <field name="print_report_name">
+            (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or
+            'Purchase Order - %s' % (object.name))
+        </field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="ia_custom_reports.purchase_order_paperformat"/>
+    </record>
+    <record id="stock.action_report_delivery" model="ir.actions.report">
+        <field name="name">Delivery Slip</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ia_custom_reports.report_deliveryslip</field>
+        <field name="report_file">ia_custom_reports.report_deliveryslip</field>
+        <field name="print_report_name">'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="ia_custom_reports.delivery_slip_paperformat"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem name="EDI Logs" id="edi_coil_order_queue_menu" sequence="10"
+                  parent="stock.menu_stock_root"/>
+
+        <menuitem name="EDI Slit Coil Order Queues" id="edi_slit_order_data_queue_menu" sequence="10"
+                  parent="ia_millform_edi_import.edi_coil_order_queue_menu" action="action_edi_slit_coil_order_queue"/>
+
+        <menuitem name="EDI Bulk Coil Order Queues" id="edi_bulk_order_data_queue_menu" sequence="20"
+              parent="ia_millform_edi_import.edi_coil_order_queue_menu" action="action_edi_bulk_coil_order_queue"/>
+
+        <menuitem id="menu_picking_import_action" parent="ia_millform_edi_import.edi_coil_order_queue_menu" action="edi_import_picking_action" sequence="30"/>
+
+        <menuitem id="menu_slitlist_import_action" parent="ia_millform_edi_import.edi_coil_order_queue_menu" action="edi_import_slitlist_action" sequence="40"/>
+
+        <menuitem id="menu_edi_slitting_order" parent="stock.menu_stock_warehouse_mgmt" action="edi_slitting_order_action" sequence="150"/>
+
+        <menuitem id="menu_warehouse_config" name="EDI" parent="stock.menu_stock_config_settings" sequence="5"/>
+        <menuitem id="menu_edi_import_config" name="Edit Config" parent="menu_warehouse_config" action="edi_import_config_action" sequence="1"/>
+
+
+
+    </data>
+</odoo>

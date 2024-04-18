@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_order_line_inherited_id" model="ir.ui.view">
+        <field name="name">sale.order.line.tree.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_shipping_id']" position="replace">
+                <field name="partner_shipping_id" groups="account.group_delivery_invoice_address"
+                       options='{"always_reload": True}'/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

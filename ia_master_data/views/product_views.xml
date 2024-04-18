@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="ia_product_template_only_form_view_1">
+        <field name="name">ia_product_template_only_form_view_1</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page name="custom_fields" string="Custom Fields">
+                    <group>
+                        <group>
+                            <field name="qty_per_pack"/>
+                            <field name="std_pack_weight_limit"/>
+                            <field name="std_step"/>
+                            <field name="jh_mini_pack_qty"/>
+                            <field name="cover_sheet_available"/>
+                            <field name="coil_width"/>
+                            <field name="coil_thickness"/>
+                        </group>
+                        <group>
+                            <field name="can_be_punched"/>
+							<field name="punch_markings"/>
+                            <field name="bridging_reduce_by"/>
+                            <field name="full_pack"/>
+                            <field name="fixed_length"/>
+                            <field name="upstream_stock_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_normal_form_view_inherit_ia_master_data" model="ir.ui.view">
+        <field name="name">product.product.view.inherit.ia_master_data</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page name="custom_fields" string="Custom Fields">
+                    <group>
+                        <group>
+                            <field name="qty_per_pack"/>
+                            <field name="std_pack_weight_limit"/>
+                            <field name="std_step"/>
+                            <field name="jh_mini_pack_qty"/>
+                            <field name="coil_width"/>
+                            <field name="coil_thickness"/>
+                        </group>
+                        <group>
+                            <field name="can_be_punched"/>
+							<field name="punch_markings"/>
+                            <field name="bridging_reduce_by"/>
+                            <field name="full_pack"/>
+                            <field name="fixed_length"/>
+                            <field name="upstream_stock_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

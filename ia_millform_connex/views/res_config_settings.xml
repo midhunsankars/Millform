@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.connex.base</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="CONNEX API" string="CONNEX API" name="ia_millform_connex">
+                    <block title="CONNEX API">
+                        <setting name="connex_specific" string="CONNEX CONFIGURATION">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="connex_state" class="col-lg-4 o_light_label"/>
+                                    <field name="connex_state" readonly="1" class="col-lg-8"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="connex_url" class="col-lg-4 o_light_label"/>
+                                    <field name="connex_url" class="col-lg-8" readonly="connex_state == 'confirmed'"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="connex_user" class="col-lg-4 o_light_label" readonly="connex_state == 'confirmed'"/>
+                                    <field name="connex_user" class="col-lg-8" readonly="connex_state == 'confirmed'"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="connex_password" class="col-lg-4 o_light_label"/>
+                                    <field name="connex_password" class="col-lg-8" readonly="connex_state == 'confirmed'" password="True"/>
+                                </div>
+                            </div>
+                            <div class="mt16">
+                                <button name="action_login_connex"
+                                    string="Login"
+                                    type="object"
+                                    style="margin-left:5px"
+                                    class="oe_highlight"
+                                    invisible="connex_state == 'confirmed'"
+                                />
+                                <button name="action_reset"
+                                    type="object"
+                                    invisible="connex_state == 'draft'"
+                                    class="oe_link"
+                                    confirm="Are you sure? You would not be reset the API"
+                                    style="margin-left:5px"
+                                    string="Reset"
+                                />
+                                <button name="cancel"
+                                    type="object"
+                                    string="Cancel"
+                                    class="oe_link"
+                                />
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="connex_api_config_action" model="ir.actions.act_window">
+        <field name="name">CONNEX API Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'ia_millform_connex'}</field>
+    </record>
+</odoo>

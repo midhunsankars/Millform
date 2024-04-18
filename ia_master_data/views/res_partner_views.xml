@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="ia_view_partner_form1">
+        <field name="name">ia_view_partner_form1</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+			<xpath expr="//page[@name='contact_addresses']" position="after">
+				<page string="Extra Fields" name="contact_extra_fields">
+					<group>
+						<group>
+							<field name="area_id" options="{'no_create': True, 'no_create_edit':True}"/> 
+							<field name="preferred_delivery_type"/>
+							<field name="loading_notes"/>
+							<field name="max_bundle_weight_limit"/>
+							<field name="access_restriction_ids" widget="many2many_checkboxes" invisible="type != 'site_address'"/>
+						</group>
+						<group>
+							<field name="direct_credit_reference"/>
+							<field name="stock_credit"/>
+							<field name="cover_sheet"/>
+							<field name="charge_freight"/>
+							<field name="product_notes_ids" widget="many2many_checkboxes" invisible="type != 'site_address'"/>
+							<field name="lifting_device_ids" widget="many2many_checkboxes" invisible="type != 'site_address'"/>
+						</group>
+					</group>
+				</page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Area -->
+    <record id="res_partner_area_tree" model="ir.ui.view">
+        <field name="name">so_punch_type_tree</field>
+        <field name="model">res.partner.area</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"/>
+				<field name="metro"/>
+                <field name="nearest_warehouse_id" options="{'no_create': True, 'no_create_edit':True}"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_res_partner_area" model="ir.actions.act_window">
+        <field name="name">Area</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner.area</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_res_partner_area"
+        action="action_res_partner_area"
+        parent="contacts.menu_localisation"
+        sequence="10"/>
+
+</odoo>

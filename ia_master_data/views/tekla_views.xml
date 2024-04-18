@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="tekla_map_tree" model="ir.ui.view">
+        <field name="name">tekla_map_tree</field>
+        <field name="model">tekla.map</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="millform_stockcode"/>
+				<field name="supplier_stockcode"/>
+				<field name="supplier_name"/>
+				<field name="centre"/>
+				<field name="v1"/>
+				<field name="v2"/>
+				<field name="u"/>
+				<field name="o"/>
+				<field name="h1"/>
+				<field name="h2"/>
+				<field name="ym2_31"/>
+				<field name="ym1_32"/>
+				<field name="ym1_33"/>
+				<field name="ym2_34"/>
+				<field name="millform_ptype"/>
+				<field name="h_ptype"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_tekla_map" model="ir.actions.act_window">
+        <field name="name">Tekla Map</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tekla.map</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_tekla_map"
+        action="action_tekla_map"
+        parent="sale.menu_sales_config"
+        sequence="15"/>
+
+</odoo>

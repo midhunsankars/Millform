@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="freight_charges_tree" model="ir.ui.view">
+        <field name="name">freight_charges_tree</field>
+        <field name="model">freight.charges</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="product_id" domain="[('detailed_type', '=', 'service')]"/>
+				<field name="metro"/>
+				<field name="crane"/>
+				<field name="longest_length"/>
+				<field name="weight"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_freight_charges" model="ir.actions.act_window">
+        <field name="name">Freight Charges</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">freight.charges</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_freight_charges"
+        action="action_freight_charges"
+        parent="sale.menu_sales_config"
+        sequence="17"/>
+
+</odoo>

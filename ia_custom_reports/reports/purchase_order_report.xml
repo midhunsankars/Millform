@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="purchase_order_template_inherited" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="attributes">
+            <attribute name="t-call">web.basic_layout</attribute>
+        </xpath>
+        <xpath expr="//div[1]" position="replace">
+        </xpath>
+        <xpath expr="//div[2]" position="replace">
+        </xpath>
+        <xpath expr="//t[@t-set='address']" position="replace">
+        </xpath>
+        <xpath expr="//t[@t-set='information_block']" position="replace">
+        </xpath>
+        <xpath expr="//div[3]" position="replace">
+        </xpath>
+        <xpath expr="//div[hasclass('page')]" position="replace">
+            <div class="page">
+                <h1 style="font-size:10px;">
+                    <span t-if="res_company.name" t-field="res_company.name"/>
+                    <span t-if="res_company.street" t-field="res_company.street"/>
+                    <span t-if="res_company.street2" t-field="res_company.street2"/>
+                    <br/>
+                    <span t-if="res_company.zip" t-field="res_company.zip"/>
+                    <span t-if="res_company.city" t-field="res_company.city"/>
+                    <span t-if="res_company.country_id" t-field="res_company.country_id"/>
+                    <h2 style="margin-left:610px;margin-top:-40px;font-size:25px;">
+                        <strong>PURCHASE ORDER</strong>
+                    </h2>
+                </h1>
+                <h3 style="border-bottom: 1px solid black">
+                </h3>
+                <div class="col-5">
+                    <table class="table table-sm o_main_table table-borderless"
+                           style="margin-left:44px;margin-top:40px;width:155px;">
+                        <td>
+                            <strong>
+                                <span t-field="o.partner_id.name" class="m-0"/>
+                                <br/>
+                                <span t-field="o.partner_id.street" class="m-0"/>
+                                <br/>
+                                <span t-field="o.partner_id.street2" class="m-0"/>
+                                <br/>
+                                <span t-field="o.partner_id.city" class="m-0"/>
+                                <br/>
+                                <span t-field="o.partner_id.country_id" class="m-0"/>
+                            </strong>
+                        </td>
+                    </table>
+                </div>
+                <img src="/ia_custom_reports/static/description/logo.png" class="float-end"
+                     style="margin-top:-145px;width:265px;"
+                     alt="Logo"/>
+                <div class="float-end">
+                    <div t-if="o.date_order">
+                        <strong>Order Date:</strong>
+                        <span t-field="o.date_order" t-options='{"widget": "date"}' class="m-0"/>
+                    </div>
+                    <div t-if="o.name">
+                        <strong>Order NO:</strong>
+                        <span t-field="o.name"/>
+                    </div>
+                </div>
+
+                <div id="informations" style="width:500px;margin-left:44px;">
+                    <div t-if="o.user_id">
+                        <strong>ATTENTION :</strong>
+                        <span t-field="o.user_id" class="m-0"/>
+                        &#160;&#160; &#160;&#160; &#160;&#160;<strong>Ph:</strong>
+                        <span t-field="o.partner_id.phone" class="m-0"/>
+                    </div>
+                </div>
+                <table class="table table-bordered"
+                       style="border: 1px;border-radius: 5px;solid black;width:90%;margin: auto;">
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_quantity" class="text-end">
+                                <strong>QUANTITY</strong>
+                            </th>
+
+                            <th name="th_description">
+                                <strong>DESCRIPTION</strong>
+                            </th>
+
+                            <!--                        <th name="th_taxes"><strong>Taxessssssss</strong></th>-->
+                            <!--                        <th name="th_date_req" class="text-center"><strong>Date Req.</strong></th>-->
+                            <th name="th_price_unit" class="text-end">
+                                <strong>RATE</strong>
+                            </th>
+                            <th name="th_amount" class="text-end">
+                                <strong>AMOUNT</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-foreach="o.order_line" t-as="line">
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
+                               groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
+                               groups="account.group_show_line_subtotals_tax_included"/>
+
+                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td class="text-end">
+                                        <span t-field="line.product_qty"/>
+                                        <span t-field="line.product_uom.name" groups="uom.group_uom"/>
+                                    </td>
+                                    <td id="product">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="line.price_unit"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="line.price_subtotal"
+                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </t>
+                                <t t-if="line.display_type == 'line_section'">
+                                    <td colspan="99" id="section">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-if="line.display_type == 'line_note'">
+                                    <td colspan="99" id="note">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+                            <t t-if="current_section and (line_last or o.order_line[line_index+1].display_type == 'line_section')">
+                                <tr class="is-subtotal text-end">
+                                    <td colspan="99" id="subtotal">
+                                        <strong class="mr16">Subtotal</strong>
+                                        <span
+                                                t-esc="current_subtotal"
+                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+                <br/>
+                <p style="margin-left:44px;font-size:large;">
+                    <strong>SLITTING PATTERNS</strong>
+                </p>
+                <div t-if="o.is_slit_order">
+                    <table class="table table-bordered"
+                           style="border: 1px;border-radius: 5px;solid black;width:90%;margin: auto;">
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="th_description">
+                                    <strong>Product</strong>
+                                </th>
+                                <th>
+                                    <strong>Width</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.order_line" t-as="order">
+                                <t t-foreach="order.slit_id.lines" t-as="l">
+                                    <tr>
+                                        <t>
+                                            <td id="product">
+                                                <span t-field="l.product_id.default_code"/>
+                                                <span t-field="l.product_id.name"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="l.coil_width"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <p style="margin-left:44px;font-size:large;">
+                        <strong>BULK COILS TO BE USED</strong>
+                    </p>
+                    <table class="table table-bordered"
+                           style="border: 1px;border-radius: 5px;solid black;width:90%;margin: auto;">
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="th_description">
+                                    <strong>Product</strong>
+                                </th>
+                                <th>
+                                    <strong>Serial Numbers</strong>
+                                </th>
+                                <th>
+                                    <strong>Available Quantity</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="line.slit_id.quant_ids" t-as="lots">
+                                <tr>
+                                    <t>
+                                        <td>
+                                            <span t-field="l.product_id.default_code"/>
+                                            <span t-field="lots.product_id.name"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="lots.lot_id.name"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="lots.available_quantity"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <br/><br/><br/>
+                <div>
+                    <table class="table table-bordered"
+                           style="border: 1px;border-radius: 5px;solid black;width: 334px;height: 100px;margin-left: 43px;margin-top:4px;">
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="terms">
+                                    <div style="margin-left:43px;text-align: left;">
+                                        <span t-esc="o.notes"/>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-bordered"
+                           style="border: 1px;solid black;width:394px;margin-left: 406px;height:100px;margin-top:-117px;">
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="terms">
+                                    <div>
+                                        <strong style="margin-left:-250px;">Sub Total :</strong>
+                                        <span class="float-end" t-esc="o.amount_untaxed"/>
+                                    </div>
+                                    <div>
+                                        <strong style="margin-left:-250px;">GST :</strong>
+                                        <span class="float-end" t-esc="o.amount_total- o.amount_untaxed"
+                                              t-options="{'widget': 'float', 'precision': 2}"/>
+                                    </div>
+                                    <div>
+                                        <strong style="margin-left:-250px;">Total :</strong>
+                                        <span class="float-end" t-esc="o.amount_total"/>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div>
+                    <table class="table table-bordered"
+                           style="border: 1px;border-radius: 5px;solid black;width: 334px;height: 100px;margin-left: 43px;margin-top:3px;">
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="terms">
+                                    <strong></strong>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-bordered"
+                           style="border: 1px;solid black;width:394px;margin-left: 406px;height:100px;margin-top:-116px;">
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th>
+                                    <strong style="margin-left:-220px;">Delivery Instructions:</strong>
+                                    <br/>
+                                    <span t-field="o.picking_type_id.company_id.street"/>
+                                    <br/>
+                                    <span t-field="o.picking_type_id.company_id.street2"/>
+                                    <br/>
+                                    <span t-field="o.picking_type_id.company_id.city"/>
+                                    <br/>
+                                    <span t-field="o.picking_type_id.company_id.zip"/>
+                                    <br/>
+                                    <span t-field="o.picking_type_id.company_id.country_id.name"/>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </xpath>
+    </template>
+    <template id="report_purchaseorder">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="ia_custom_reports.purchase_order_template_inherited" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

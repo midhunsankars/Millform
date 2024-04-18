@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock_view_warehouse" model="ir.ui.view">
+            <field name="name">stock.view_warehouse.form</field>
+            <field name="model">stock.warehouse</field>
+            <field eval="180" name="priority"/>
+            <field name="inherit_id" ref="stock.view_warehouse"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="slitter_warehouse"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- ALLOCATION -->
+        <record id="ia_tms_view_move_tree" model="ir.ui.view">
+            <field name="name">stock.move.tree</field>
+            <field name="model">stock.move</field>
+            <field eval="180" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Moves" create="0" default_order="date desc">
+                    <field name="date" groups="base.group_no_one"
+                           decoration-danger="(state not in ('cancel','done')) and date > current_date"/>
+                    <field name="reference"/>
+                    <field name="picking_type_id" invisible="1"/>
+                    <field name="location_usage" invisible="1"/>
+                    <field name="location_dest_usage" invisible="1"/>
+                    <field name="product_id"/>
+                    <field name="load_id"/>
+                    <field name="allocation_status"/>
+                    <field name="location_id" options="{'no_create': True}" string="From"
+                           decoration-muted="location_usage not in ('internal','transit')"/>
+                    <field name="location_dest_id" options="{'no_create': True}" string="To"
+                           decoration-muted="location_dest_usage not in ('internal','transit')"/>
+                    <field name="product_packaging_id" optional="hide" groups="product.group_stock_packaging"/>
+                    <field name="product_uom_qty" string="Quantity" sum="Total Quantity"
+                           decoration-danger="(location_usage in ('internal','transit')) and (location_dest_usage not in ('internal','transit'))"
+                           decoration-success="(location_usage not in ('internal','transit')) and (location_dest_usage in ('internal','transit'))"/>
+                    <field name="product_uom" options="{'no_open': True, 'no_create': True}" string="Unit"
+                           groups="uom.group_uom"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state" widget='badge' optional="show"
+                           decoration-danger="state=='cancel'"
+                           decoration-info="state== 'assigned'"
+                           decoration-muted="state == 'draft'"
+                           decoration-success="state == 'done'"
+                           decoration-warning="state not in ('draft','cancel','done','assigned')"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="ia_tms_view_move_line_action" model="ir.actions.act_window">
+            <field name="name">Pickup</field>
+            <field name="res_model">stock.move</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="ia_tms_view_move_tree"/>
+            <field name="domain">[('state','not in',('draft','cancel')),('load_id','=',
+                False),('picking_id.picking_type_id.warehouse_id.slitter_warehouse','!=', False)]
+            </field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem
+                id="ia_tms_view_move_line_menu"
+                parent="menu_main_tms_loads"
+                name="Pickup"
+                action="ia_tms_view_move_line_action"
+                sequence="3"
+        />
+
+    </data>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_partner_area,res_partner_area,model_res_partner_area,base.group_user,1,1,1,1
+access_tekla_map,tekla_map,model_tekla_map,base.group_user,1,1,1,1
+access_freight_charges,freight_charges,model_freight_charges,base.group_user,1,1,1,1
+access_partner_access_restrictions,partner.access.restrictions,model_partner_access_restrictions,base.group_user,1,1,1,1
+access_partner_product_notes,partner.product.notes,model_partner_product_notes,base.group_user,1,1,1,1
+access_partner_lifting_device,partner.lifting.device,model_partner_lifting_device,base.group_user,1,1,1,1

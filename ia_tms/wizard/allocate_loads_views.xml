@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="tms_loads_allocation_form" model="ir.ui.view">
+            <field name="model">tms.loads.allocate</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+						<field name="load_id" domain="[('state','=','new')]"/>
+                    </group>
+					
+                    <footer>
+                        <button
+                                name="action_allocate"
+                                string="Allocate"
+                                type="object"
+                                class="oe_highlight"
+                        />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+		
+        <!-- Add to Loads -->
+        <record id="action_allocate_to_load" model="ir.actions.act_window">
+            <field name="name">Allocate to Load</field>
+            <field name="res_model">tms.loads.allocate</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="stock.model_stock_move"/>
+            <field name="binding_view_types">list</field>
+        </record>
+
+    </data>
+</odoo>

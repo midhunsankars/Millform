@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="edi_bulk_coil_line_view_tree" model="ir.ui.view">
+            <field name="name">edi.bulk.coil.line</field>
+            <field name="model">edi.bulk.coil.line</field>
+            <field name="arch" type="xml">
+                <tree create="0" delete="0" editable="bottom" decoration-info="order_id">
+                    <header>
+                        <button name="action_process_bulk" type="object" class="btn-primary" string="Process Bulk"/>
+                    </header>
+                    <field name="sn_number" readonly="1"/>
+                    <field name="order_id" required="0"/>
+                    <field name="vendor_code" readonly="1"/>
+                    <field name="product_id" optional="show"/>
+                    <field name="qty_done" readonly="0"/>
+                    <field name="received_date" readonly="1"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="edi_bulk_coil_line_view_search" model="ir.ui.view">
+            <field name="name">edi.bulk.coil.line</field>
+            <field name="model">edi.bulk.coil.line</field>
+            <field name="arch" type="xml">
+                <search string="Bulk Coil Line">
+                    <field name="sn_number" string="string"/>
+                    <field name="product_id" string="string"/>
+                    <field name="vendor_code" string="string"/>
+                    <filter name="filter_state_pending" string="Pending" domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_state_done" string="Done" domain="[('state', '=', 'completed')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" name="product_id" domain="[]" context="{'group_by': 'product_id'}"/>
+                        <filter string="Purchase Order" name="order_id" domain="[]" context="{'group_by': 'order_id'}"/>
+                        <filter string="Status" name="status" domain="[]" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="edi_bulk_coil_line_action" model="ir.actions.act_window">
+            <field name="name">EDI Bulk Coil Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">edi.bulk.coil.line</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{'search_default_filter_state_pending': True}</field>
+            <field name="search_view_id" ref="edi_bulk_coil_line_view_search"/>
+        </record>
+
+    </data>
+</odoo>

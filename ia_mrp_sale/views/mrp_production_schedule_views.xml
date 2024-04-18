@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="mrp_schedule_tree_view" model="ir.ui.view">
+        <field name="name">Connex Production Schedule</field>
+        <field name="model">mrp.schedule</field>
+        <field name="arch" type="xml">
+            <tree create="1" editable="bottom">
+                <header>
+                    <button name="assign_costing" type="object" class="btn-primary" string="Assign Costing"/>
+                </header>
+                <field name="sequence" widget="handle"/>
+                <field name="schedule_type"/>
+                <field name="workcenter_id" readonly="schedule_type != 'mrp'"/>
+                <field name="production_id" readonly="schedule_type != 'mrp'"/>
+                <field name="sale_id"/>
+    			<field name="product_id"/>
+                <field name="product_qty"/>
+                <field name="product_uom_id"/>
+    			<field name="date_start"/>
+    			<field name="company_id" invisible="1"/>
+    			<field name="value"/>
+            </tree>
+        </field>
+    </record>
+	
+	<record id="action_mrp_schedule" model="ir.actions.act_window">
+        <field name="name">Connex Production Schedule</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.schedule</field>
+        <field name="view_mode">tree</field>
+		<field name="view_id" ref="mrp_schedule_tree_view"/>
+<!--		<field name="domain">[('production_ready','=',True)]</field>-->
+		<field name="domain">[]</field>
+    </record>
+
+    <menuitem id="menu_mrp_production_schedule"
+        action="action_mrp_schedule"
+        parent="mrp.mrp_planning_menu_root"
+        sequence="50"/>
+
+</odoo>

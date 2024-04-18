@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="edi_import_picking_view_tree" model="ir.ui.view">
+            <field name="name">edi_import_picking_view_tree</field>
+            <field name="model">edi.import.picking</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="edi_import_picking_view_form" model="ir.ui.view">
+            <field name="name">edi_import_picking_view_form</field>
+            <field name="model">edi.import.picking</field>
+            <field name="arch" type="xml">
+                <form string="EDI Import Picking">
+                    <header>
+                        <button name="import_file_edi" string="Import EDI" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,imported"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="file_name" invisible="1" />
+                                <field name="import_file" filename="file_name" />
+                            </group>
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Import Lines" name="order_lines">
+                                <field
+                                        name="import_lines"
+                                        mode="tree"
+                                        readonly="1"
+                                >
+                                    <tree
+                                            string="Import Lines"
+                                            editable="bottom"
+                                    >
+                                        <field name="order_id" options='{"no_open": True, "no_create": True}'
+                                               optional="show"
+                                               />
+                                        <field name="sn_number"/>
+                                        <field name="vendor_code"/>
+                                        <field name="qty_done"/>
+                                        <field name="received_date"/>
+                                        <field name="po_number"/>
+
+                                        <field name="product_id" options='{"no_open": True, "no_create": True}'
+                                               optional="show"
+                                        />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="edi_import_picking_action" model="ir.actions.act_window">
+            <field name="name">Import EDI Receipts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">edi.import.picking</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="quotation_paper_format_id" model="report.paperformat">
+            <field name="name">A4 for quotation</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+            <field name="print_page_width">210</field>
+            <field name="print_page_height">297</field>
+        </record>
+        <record id="sale_order_paper_format_id" model="report.paperformat">
+            <field name="name">A4 for sale Order</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">13</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+            <field name="print_page_width">210</field>
+            <field name="print_page_height">297</field>
+        </record>
+        <record id="purchase_order_paperformat" model="report.paperformat">
+            <field name="name">A4 for Purchase Order</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">15</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+            <field name="print_page_width">210</field>
+            <field name="print_page_height">297</field>
+        </record>
+        <record id="delivery_slip_paperformat" model="report.paperformat">
+            <field name="name">A4 for Delivery Slip</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">13</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+            <field name="print_page_width">210</field>
+            <field name="print_page_height">297</field>
+        </record>
+    </data>
+</odoo>
